@@ -23,7 +23,7 @@ Some upkeep should run without anyone starting a session: hygiene, the weekly fl
 
 ## Architecture
 
-- **Hygiene run** at a fixed local time: safe-class cleanup, then the verify step.
+- **Hygiene run** at a fixed local time: safe-class workspace cleanup (branches, worktrees, scratch, old handoffs, expired locks; [09](09-branching-and-cleanup.md) rules 30-34), board archive when over a limit ([10](10-board-and-backlog-engine.md)), then the verify step.
 - **Weekly fleet optimization run**, its own capped headless job, following collect-then-judge:
   1. Save a snapshot first, because session logs are short-lived.
   2. The fleet analyst (standard, or light if enabled; read-only) reads the week's session logs and the spend, drift, guard-fire, procedure-usage and context-audit reports, and ranks findings: spend and drift, rule compliance, wasted work, config rot, context quality including context bloat ([13](13-context-cards-and-memory.md)), unused procedures. It also reports outcome metrics and spend against the caps ([12](12-model-policy-and-spend.md)).

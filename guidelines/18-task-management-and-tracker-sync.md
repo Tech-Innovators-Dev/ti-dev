@@ -22,6 +22,7 @@ Keep one trustworthy record of delivery state, and show it where each audience l
 10. Fail open. A tracker outage never blocks engineering work: queue the sync, retry, and record drift on the board.
 11. Keep the ledger durable: commit it to the workspace repo or keep it in a store with backups, and document a restore procedure.
 12. Keep the approval log append-only in the ledger ([19](19-security-trust-and-incidents.md)).
+13. **Retention.** Archive completed entries in place (collapsed to a summary line) or to a dated archive file; never delete. Keep ids, evidence digests and receipts resolvable, and never archive an entry an open task depends on. Archiving is not owner acceptance. Apply the same triggers and limits as the board ([10](10-board-and-backlog-engine.md)).
 
 ## Architecture
 

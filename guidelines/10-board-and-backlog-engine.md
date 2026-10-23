@@ -34,6 +34,16 @@ One living board holds current state: in flight, blocked, needs the owner, next 
 19. Route each repo to a lane and model tier. Retry a blocked worker on the strong tier.
 20. **Worker contract:** a fixed prompt, and a structured report of status, commit, files and items left open, handled by fixed rules.
 
+**Bounding** (limits live in the manifest **board** key, [17](17-adoption-map.md))
+21. Bound the living board by two limits: **size limit** (default 150 lines) and **resolved rows kept** (default 10). Count the whole file, whatever is omitted at session start.
+22. **Archive trigger.** Archive a resolved item once its milestone is accepted or handed off, or once it is older than the **resolved-age** limit (default 14 days). Also archive the oldest resolved items first when either limit is exceeded.
+23. **What moves.** The narrative moves verbatim to a dated archive file at the **archive location**. The board keeps one row (id, title, resolved date) and a link to the archive entry.
+24. **Never archive** an item that is active, blocked or needs the owner, or any item an open item depends on. If limits still fail after archiving, report which open items hold the board over the limit.
+25. Archiving keeps every reference, receipt and tracker link resolvable: the archive entry keeps the original id, and the board row's link points to it. Never delete.
+26. Archiving is housekeeping, not owner acceptance, and changes no task state or tracker status.
+27. The trimmed board injected at session start ([06](06-guards-and-session-events.md)) counts toward the size limit; if it alone exceeds the context budget ([13](13-context-cards-and-memory.md)), archive more, not omit more.
+28. The kit ships no board file, so the generated workspace linter implements the check at setup: it fails when the real board exceeds either limit and prints the archive step. Archiving runs from the hygiene run ([15](15-scheduled-ops-and-governance.md)) or on demand.
+
 ## Architecture
 
 - **Board** plus a verbatim archive. Per-project boards stay living documents, and their task state feeds the fleet ledger. The cross-project board is generated from the ledger. The backlog engine writes ledger task records on the orchestrator's behalf ([18](18-task-management-and-tracker-sync.md)).
@@ -52,9 +62,9 @@ One living board holds current state: in flight, blocked, needs the owner, next 
 
 - Agents call the engine; the engine owns state.
 - **Per project:** board sections, classifier triggers, repo map, issue pattern, routing table, stamp policy, UI directories. Keep triggers and stamp policy in the manifest ([17](17-adoption-map.md)).
-- **At setup,** detect schema, migration, IaC, signing and UI paths. Tracker detection belongs to [18](18-task-management-and-tracker-sync.md). Ask for the project name, whether to enable the engine or just the board, bundle caps, and which tasks are human-only.
+- **At setup,** detect schema, migration, IaC, signing and UI paths. Tracker detection belongs to [18](18-task-management-and-tracker-sync.md). Ask for the project name, whether to enable the engine or just the board, bundle caps, and which tasks are human-only. Show the board limits and archive location (defaults) and ask only for changes.
 
 ## Pitfalls
 
-- Avoid an unbounded board. Add a size limit to lint that prompts archiving.
+- Avoid an unbounded board. Apply the bounding rules (21-28).
 - Avoid a classifier in code. Use config.

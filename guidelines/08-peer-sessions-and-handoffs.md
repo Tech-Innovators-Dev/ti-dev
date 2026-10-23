@@ -17,7 +17,7 @@ Several agent sessions run side by side against one checkout, each in its own te
 9. Ask peers before the owner about anything a peer holds. Escalate only what they cannot answer, with their answers.
 10. Only main sessions message each other. Specialists report to their lead.
 11. Do owner requests that are in scope or small. Table the rest in the backlog with a reason ([10](10-board-and-backlog-engine.md)).
-12. To finish: write a "Left open" line, record ready, release. The last session on a rolling branch merges ([09](09-branching-and-cleanup.md)).
+12. To finish: run the closeout procedure, which writes the "Left open" line, records ready and releases; the last session on a rolling branch merges ([09](09-branching-and-cleanup.md) rules 18-29).
 13. The emergency stop pauses all sessions; a session resumes, and the launcher opens new ones, only after the owner lifts it ([19](19-security-trust-and-incidents.md)).
 14. Open a new session only when the owner asks. Launch it planning-only, in a new pane, with a self-contained brief (never a copied history) that tells it to claim, plan and note. Refuse at the session cap, when admission says busy, or on a name clash.
 15. **Safe close:** close only a finished session the launcher opened, and only its pane. Refuse if the pane has typed text, live child work or no launch record.

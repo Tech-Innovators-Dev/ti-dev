@@ -27,6 +27,7 @@ Procedures are on-demand playbooks that hold formats and step lists. They keep t
 | merge-ready-checklist | MERGE-READY / NOT READY / MERGE BATCH with the box list | See [05](05-ship-bar-and-stamps.md). |
 | verify-ship-gate | Stamp template and evidence bar | See [05](05-ship-bar-and-stamps.md). |
 | board | Board read and update | End each status with one next step. Escalate a blocker older than two days. Collapse resolved items. See [10](10-board-and-backlog-engine.md). |
+| closeout | Merge, switch, pull and cleanup record, plus the `Left open:` list | Verify, merge by the branch model, fast-forward only, safe-class cleanup, release, board, archive check. Never force; idempotent; always reports. Use when a session's work completes or the owner asks to clean up, close out or wrap up. See [09](09-branching-and-cleanup.md). |
 | handoff | Dated handoff note, index line, peer note | Replaces context compaction for long sessions. See [08](08-peer-sessions-and-handoffs.md). |
 | new-session | Brief from a template, launched planning-only | Capacity and duplicate refusals; safe close. See [08](08-peer-sessions-and-handoffs.md). |
 | backlog-engine | Add, triage, bundle, plan, dispatch, seal (flows: add, tick, build) | Every mutation goes through the engine. See [10](10-board-and-backlog-engine.md). |
@@ -47,7 +48,7 @@ Procedures are on-demand playbooks that hold formats and step lists. They keep t
 
 ## Interactions
 
-- Script-backed procedures: backlog-engine, handoff, new-session, merge-ready-checklist and fleet-review call the workspace's state tools rather than editing state ([08](08-peer-sessions-and-handoffs.md), [09](09-branching-and-cleanup.md), [10](10-board-and-backlog-engine.md)).
+- Script-backed procedures: backlog-engine, handoff, new-session, merge-ready-checklist, closeout and fleet-review call the workspace's state tools rather than editing state ([08](08-peer-sessions-and-handoffs.md), [09](09-branching-and-cleanup.md), [10](10-board-and-backlog-engine.md)).
 - The handoff procedure pairs with the compaction checkpoint and the session-start handoff listing ([06](06-guards-and-session-events.md)).
 - Lanes preload at most two procedures ([02](02-roster-and-agents.md)). Rules point here for procedure ([04](04-rules.md)).
 - The usage report counts invocations and lists procedures never used ([12](12-model-policy-and-spend.md)).

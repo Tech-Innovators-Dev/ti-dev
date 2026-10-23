@@ -2,6 +2,26 @@
 
 All notable changes to the ti-workspace kit. The kit uses semantic versioning.
 
+## 0.1.3 (2026-10-23)
+
+### Task closeout and workspace cleanup
+- Guideline 09 gains a task closeout sequence (verify, merge by the branch model, fast-forward switch, safe-class cleanup, release, board and tracker, archive check), an outstanding items log (`Left open:`) and a workspace cleanup routine.
+- Closeout may switch a root checkout only when it is clean, unclaimed by a live peer and the owner's dev-server view is undisturbed; rules 12 and 15 carry the pointer.
+- Guideline 03 adds the closeout procedure; guideline 08 rule 12 points to it; guidelines 15 and 17 mention the cleanup and the new key.
+- The manifest template gains `closeout.scratch_retention_days` and `closeout.handoff_retention_days`; `scripts/check.sh` checks them.
+- The cleanup sweep is scoped to enumerated, git-ignored or generated paths inside the root, never follows symlinks or removes git locks, and names come from repo listings, never from untrusted text (rules 35-36).
+- Closeout and its cleanup run automatically when a session's work completes or the owner asks to clean up, close out or wrap up (charter, guideline 09 trigger, procedure trigger sentence).
+- Cleanup reports locks and never removes one; worktree removal lists git-ignored files first and a worktree a live claim owns is never removed.
+
+## 0.1.2 (2026-10-23)
+
+### Board bounding
+- Guideline 10 gains bounding rules: size limit (150 lines), resolved rows kept (10), resolved-age days (14), an archive trigger, verbatim dated archives with one-line board rows, and items that never archive.
+- Archiving keeps references resolvable and is not owner acceptance; the session-start board counts toward the limit.
+- Guideline 18 adds ledger retention; guidelines 15 and 17 mention the archive step and the new keys.
+- The manifest template gains `board.max_lines`, `max_resolved_rows`, `resolved_age_days` and `archive_location`.
+- `scripts/check.sh` checks that the manifest template carries the new board keys.
+
 ## 0.1.1 (2026-10-23)
 
 - Released under the MIT License (`LICENSE`).

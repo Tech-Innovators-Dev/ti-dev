@@ -4,6 +4,7 @@
 #   2. every relative .md link resolves
 #   3. area files have the six headings in order
 #   4. dist/ matches a fresh build
+#   5. manifest template has the board bounding and closeout keys
 set -u
 LC_ALL=C
 export LC_ALL
@@ -73,6 +74,21 @@ if sh scripts/build-bundle.sh "$tmpdir/bundle.md" > /dev/null && cmp -s "$tmpdir
 else
   echo "FAIL bundle: dist/ti-workspace-kit.md is missing or stale; run scripts/build-bundle.sh"
   fail=1
+fi
+
+# 5. Board bounding keys in the manifest template. The kit ships no board file,
+# so the board size lint itself is generated at setup (guidelines/10).
+missing_keys=""
+for k in max_lines max_resolved_rows resolved_age_days archive_location; do
+  grep -qE "^  $k:" templates/manifest.template.yaml || missing_keys="$missing_keys $k"
+done
+for k in scratch_retention_days handoff_retention_days; do
+  grep -qE "^  $k:" templates/manifest.template.yaml || missing_keys="$missing_keys $k"
+done
+if [ -n "$missing_keys" ]; then
+  echo "FAIL board keys: manifest template lacks:$missing_keys"; fail=1
+else
+  echo "ok   board keys: manifest template has the board bounding and closeout keys"
 fi
 
 if [ "$fail" -ne 0 ]; then echo "check: FAILED"; exit 1; fi

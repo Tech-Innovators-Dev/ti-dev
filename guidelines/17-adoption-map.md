@@ -33,7 +33,8 @@ One per-project manifest replaces every hard-coded list. Conceptual keys:
 - **naming guard**: optional data naming convention and exceptions.
 - **lanes**: name, archetype, ownership, persona.
 - **stamps**: families in use; verifier escalation uses the triggers under **models**.
-- **board**: location and sections omitted at session start.
+- **board**: location, sections omitted at session start, size limit, resolved rows kept, resolved-age days, archive location ([10](10-board-and-backlog-engine.md)).
+- **closeout**: scratch retention days, handoff retention days ([09](09-branching-and-cleanup.md)).
 - **backlog**: enabled, classifier (path pattern, reason, tier), caps.
 - **peers**: enabled, max sessions, multiplexer.
 - **environments**: for each of local, staging and production, its name, how to run or deploy it, and its access. Local and staging: full, including staging deploy workflows (allowed without asking); each allowed staging form must be pinned to the staging target. Production: none (default) or read-only through a read path (for example a read-only database role or replica) with allowed read commands. Production writes are always human-approved and not configurable. A missing staging environment is recorded, and agent deploys then stop at local.
@@ -85,7 +86,7 @@ One per-project manifest replaces every hard-coded list. Conceptual keys:
 - Avoid hand-mirrored CI; derive push checks and re-check them.
 - Avoid hand-kept docs about loading; generate guard and layer tables.
 - Avoid narrative in always-loaded files; cap sizes in the workspace linter.
-- Avoid board and memory bloat; lint thresholds and archive.
+- Avoid board and memory bloat; lint thresholds and archive (board limits: [10](10-board-and-backlog-engine.md)).
 - Avoid traces of retired features; scan templates for retired commands.
 - Avoid hard-coded paths, identities and prices in kit code.
 - Avoid model names in kit code; roles name a tier, and the manifest maps tiers to models.
