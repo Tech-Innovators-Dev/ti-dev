@@ -1,7 +1,7 @@
 ---
 date: 2026-10-23
 status: open
-phase: guidelines revised and packaged as v0.1.0 (environment access, optimization run, context management, poteto-mode, tracker sync, model tiers, security); kit build not started
+phase: guidelines revised and packaged as v0.1.4 (environment access, optimization run, context management, poteto-mode, tracker sync, model tiers, security); kit build not started
 supersedes: none
 ---
 
