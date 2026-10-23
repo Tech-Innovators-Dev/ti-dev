@@ -1,0 +1,211 @@
+# ti-workspace manifest template (kit 0.1.0, schema 1)
+#
+# One per-project manifest replaces every hard-coded list. Every guard, tool
+# and template reads it. Keys and meanings: guidelines/17-adoption-map.md.
+#
+# Markers in comments:
+#   [detect]  setup fills this from read-only analysis
+#   [ask]     setup asks the user (recommendation first)
+#   [default] shipped default; setup shows it and asks only for changes
+# Store this file in the workspace config location your platform uses.
+# Never put secret values here; reference the platform's secret store.
+
+kit_version:
+  kit: 0.1.0                      # [detect] installed kit version
+  schema: 1                       # [detect] manifest schema version
+
+capability_map:                   # [detect] native support per role, plus fallback
+  session_events:        { native: <fill-in>, fallback: "charter tells sessions to run the start step" }
+  pre_action_checks:     { native: <fill-in>, fallback: "permission tiers only; guards run as wrappers" }
+  delegates_with_tiers:  { native: <fill-in>, fallback: "pass tier on every launch; model-drift report" }
+  scheduled_headless:    { native: <fill-in>, fallback: "OS scheduler running capped headless sessions" }
+  inter_session_messaging: { native: <fill-in>, fallback: "claims file and handoff notes" }
+  secret_store:          { native: <fill-in>, fallback: "stdin or the OS keychain at launch; never printed" }
+
+owner:                            # [ask]
+  name: <fill-in>
+  title: <fill-in>
+  timezone: <fill-in>
+  production_approver: <fill-in>
+
+humans:                           # [ask] approvers registry; identity = platform identity
+  - { name: <fill-in>, identity: <fill-in>, roles: [owner, production-approver] }
+  # roles: owner | production-approver | reviewer | on-call
+
+notification_channel: <fill-in>   # [ask] one owner channel for "waiting on you" and incidents
+
+outward_channels: []              # [ask] pre-approved pairs; everything else asks.
+                                  # The owner notification channel is implicitly pre-approved (guidelines/19).
+  # - { channel: <fill-in>, message_type: <fill-in> }
+
+emergency_stop:                   # [default] any listed human triggers; only the owner lifts
+  command: <fill-in>
+  flag_location: <fill-in>        # unreadable flag counts as set
+  drill_schedule: quarterly
+
+spend_caps:                       # [ask] all fleet work: interactive, delegated, scheduled
+  daily: <fill-in>
+  monthly: <fill-in>
+  alert_threshold: 0.8            # [default]
+
+project:                          # [ask]
+  name: <fill-in>
+  codename: null
+  deadline: null
+
+code_host:                        # [detect]
+  organization: <fill-in>
+  issue_ref_pattern: "<repo>#N"
+
+repos:                            # [detect], branch model [ask]
+  - name: <fill-in>
+    path: <fill-in>
+    primary_branch: main
+    branch_model: rolling         # rolling | per-issue
+    rolling_branch: null
+    hosts_nest: false
+    apply_before_merge: false
+    push_checks:                  # [detect] derived from CI, in CI order
+      - { name: <fill-in>, command: <fill-in>, fix_hint: <fill-in>, requires: null }
+
+protected_branches: [main]        # [detect]
+
+merge_policy:                     # [ask]
+  no_prompt_repos: []             # fleet-proposal PRs are never listed here
+  stamp_gated_repos: []
+  human_only_workflows: []
+
+nest:                             # [detect]
+  start_command: <fill-in>
+  ports: []
+
+forbidden_remote_hosts: []        # [ask]
+
+ask_commands: []                  # [ask] patterns that always need the owner
+  # - { pattern: <fill-in>, reason: <fill-in> }
+
+capacity:                         # [detect] machine size; thresholds [default]
+  heavy_commands: []
+  thresholds: <fill-in>
+
+models:
+  tier_map:                       # [detect] available models, mapped by setup
+    light: <fill-in>              # off unless enabled below
+    standard: <fill-in>           # mid-size model; the default tier
+    strong: <fill-in>
+  light_enabled: false            # [ask] opt-in for mechanical, high-volume steps only
+  roles:                          # [default] shipped defaults (guidelines/12); [ask] changes
+    main_session: standard
+    lane.ui: standard
+    lane.api: standard
+    lane.platform: standard
+    lane.design: standard
+    lane.docs: standard
+    lane.context_refresher: standard
+    lane.fleet_analyst: standard
+    lane.verifier: standard       # routine stamps; escalates to strong on triggers
+    lane.data: strong
+    lane.infra: strong
+    lane.fleet_designer: strong
+    delegate.search: standard
+    delegate.general: standard
+    step.plan_ready: strong
+    step.cross_lane_scope_lock: strong
+    step.backlog_planner: strong
+    step.architecture_decision: strong
+    step.deep_review_gate: strong
+    step.security_review: strong
+    step.log_extraction: standard # light if enabled
+    step.backlog_scout: standard  # light if enabled
+    step.scans: standard          # light if enabled
+  escalation_triggers:            # [default] a standard call moves to strong
+    - schema
+    - authz-or-security
+    - novel-cross-lane-behavior
+
+naming_guard: null                # [ask] { convention: <fill-in>, exceptions: [] }
+
+lanes:                            # [default] from archetypes; [ask] trims and personas
+  - { name: <fill-in>, archetype: <fill-in>, owns: [], persona: null }
+
+stamps:                           # [detect] from repo surfaces
+  families: []
+  # escalation: uses models.escalation_triggers (one list)
+
+board:                            # [default]
+  location: <fill-in>
+  omit_at_session_start: [Backlog, Decided, Orphans]
+
+backlog:                          # [ask] enabled with parallel sessions
+  enabled: false
+  classifier: []                  # - { path_pattern: <fill-in>, reason: <fill-in>, tier: standard }
+  caps: {}
+
+peers:                            # [ask] solo or parallel sessions
+  enabled: false
+  max_sessions: 4
+  multiplexer: <fill-in>          # [detect]
+
+environments:                     # [detect] staging config and deploy targets; [ask] confirm
+  local:
+    name: local
+    run: <fill-in>
+    access: full
+  staging:                        # null if none; agent deploys then stop at local
+    name: <fill-in>
+    deploy: <fill-in>             # allowed without asking; pinned to the staging target
+    access: full
+  production:
+    name: <fill-in>
+    access: none                  # [ask] none (default) | read-only
+    read_path: null               # e.g. a read-only database role or replica
+    read_commands: []
+    # Production writes always need explicit human approval. Not configurable.
+
+trackers:                         # [detect] trackers in use; [ask] mapping and policy
+  code_host: <fill-in>
+  business_tracker: null          # null if none
+  project_mapping: {}
+  status_map: {}                  # must cover every internal task and bundle state
+  field_ownership:
+    fleet: [delivery_state]
+    tracker: [priority, due_date, assignee, scope]
+  write_policy: linked-items-only # [default]; loosening needs the owner's recorded choice
+  identity: <fill-in>             # least-privilege tracker identity
+
+optimization_run:                 # [ask] enable (recommended), schedule, budget
+  enabled: true
+  day: <fill-in>                  # weekday
+  time: <fill-in>
+  per_run_cap: { turns: <fill-in>, cost: <fill-in> }
+  monthly_limit: <fill-in>
+  proposal_branch_pattern: "fleet-<date>"
+
+discipline:                       # [detect] platform version or port; [ask] enable
+  playbook: poteto-mode
+  auto_load: true
+  port_location: null
+
+context:                          # [ask]
+  session_budget: <fill-in>
+  lane_budget: <fill-in>
+  handoff_threshold: 0.8
+
+modules:                          # [ask] Core is always on
+  roster: true
+  model_and_spend: true
+  peers: false
+  branching: true
+  backlog: false
+  capacity: false
+  push_checks: true
+  naming_guard: false
+  compaction_checkpoint: true
+  context_cards: true
+  scheduled_ops: true
+  tracker_sync: false
+  governance_as_code: false
+  alert_triage: false
+
+state_location: <fill-in>         # workspace state directory
+env_prefix: TI_
