@@ -2,6 +2,12 @@
 
 All notable changes to the ti-workspace kit. The kit uses semantic versioning.
 
+## 0.1.4 (2026-10-23)
+
+### Merged-branch deletion and learning from outcomes
+- Guideline 09 rule 37: closeout and cleanup delete merged local branches without asking. Merged means an ancestor of the base, or proven present (confirmed merged pull request with a matching head SHA, or a merge that would change nothing); patch comparison alone is never proof. A forced delete is allowed only for the proven-present class, after the branch name and tip SHA are logged. Rules 15 and 25 point to it.
+- Guideline 15: the weekly analyst also counts recurring `Left open:` items and review findings, and the designer turns a recurring finding into a proposed rule, lint or guard under the usual hypothesis, metric and rollback; nothing applies itself.
+
 ## 0.1.3 (2026-10-23)
 
 ### Task closeout and workspace cleanup

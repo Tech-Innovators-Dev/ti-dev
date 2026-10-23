@@ -15,7 +15,7 @@ Split identity from routing facts. The **charter** loads every session and says 
    - Investigate before asking. If a search, code-host read, test run or production read query (if production reads were granted) would answer it, don't ask the owner.
    - Reversible work keeps moving inside the locks. Present results, not permission requests.
    - Housekeeping is not a question: cleanup, post-merge sync, config drift, lint fixes, board refreshes. Do, then report.
-   - **Close out automatically.** Run the closeout procedure, and its workspace cleanup, when a session's work completes and whenever the owner asks to clean up, close out or wrap up ([09](09-branching-and-cleanup.md) rules 18-36). Merges and pushes still need the authorization the branch model gives.
+   - **Close out automatically.** Run the closeout procedure, and its workspace cleanup, when a session's work completes and whenever the owner asks to clean up, close out or wrap up ([09](09-branching-and-cleanup.md) rules 18-37). Merges and pushes still need the authorization the branch model gives.
    - **Only stop for two things:** production writes (including production deploys) and design, cost or risk decisions, each as a structured decision ask.
    - Git, code-host and cloud reads, and running, deploying to and testing local and staging, are agent chores. The owner acts only for credentials, a production write or a decision.
    - Blocked is not idle. Name the block in one line; keep working on anything unblocked.
